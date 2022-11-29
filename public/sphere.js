@@ -1,8 +1,6 @@
-//import * as THREE from 'three'
 import * as THREE from './build/three.module.js'
-//import { EventDispatcher } from './jsm/controls/EventDispatcher.js';
-import { OrbitControls } from './jsm/controls/OrbitControls.js'
-//import { Stats } from './jsm/libs/stats.module.js'
+//import { OrbitControls } from './jsm/controls/OrbitControls.js'
+import Stats from './jsm/libs/stats.module.js'    // https://bobbyhadz.com/blog/javascript-requested-module-not-provide-export-named
 import { GUI } from './jsm/libs/lil-gui.module.min.js'
 
 console.log("start");
@@ -16,9 +14,9 @@ const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
-const controls = new OrbitControls(camera, renderer.domElement)
+//const controls = new OrbitControls(camera, renderer.domElement)
 
-const geometry = new THREE.BoxGeometry()
+const geometry = new THREE.SphereGeometry( 15, 32, 16 );
 const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
     wireframe: true,
@@ -37,10 +35,8 @@ window.addEventListener(
     false
 )
 
-/*
 const stats = Stats()
 document.body.appendChild(stats.dom)
-*/
 
 const gui = new GUI()
 const cubeFolder = gui.addFolder('Cube')
@@ -56,7 +52,7 @@ function animate() {
     requestAnimationFrame(animate)
     cube.rotation.x += 0.01
     cube.rotation.y += 0.01
-    controls.update()
+//    controls.update()
     render()
     stats.update()
 }
