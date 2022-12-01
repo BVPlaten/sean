@@ -1,10 +1,7 @@
-// import * as THREE from '../build/three.module.js'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import Stats from 'three/addons/libs/stats.module.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
-
-console.log("start");
 
 const scene = new THREE.Scene()
 
@@ -17,7 +14,7 @@ document.body.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
-const geometry = new THREE.BoxGeometry()
+const geometry = new THREE.SphereGeometry( 1, 24, 24 );
 const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
     wireframe: true,
