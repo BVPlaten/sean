@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from '../jsm/controls/OrbitControls.js'
 import Stats from '../jsm/libs/stats.module.js'
 import { GUI } from '../jsm/libs/lil-gui.module.min.js'
+import makeMesh from './geomFactory'
 
 export default class RootScene {
     scene! :THREE.Scene;
@@ -11,7 +12,6 @@ export default class RootScene {
     controls! :OrbitControls;
     stats! :Stats; 
     gui! :GUI;
-
 
     constructor() {
         this.scene = new THREE.Scene()
@@ -25,7 +25,7 @@ export default class RootScene {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
         
         // ****
-        this.scene.add(this.addSphere());
+        this.scene.add(this.switchGeometry("Box"));
         // ****
         
         this.stats = Stats()
@@ -44,14 +44,8 @@ export default class RootScene {
         cameraFolder.open()
     }
 
-    addSphere(): THREE.Mesh {
-        const geometry = new THREE.SphereGeometry( 1, 24, 24 );
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x00ff00,
-            wireframe: true,
-        })
-        const object = new THREE.Mesh(geometry, material)
-        return object;
+    switchGeometry(geomName: string): THREE.Mesh{
+        return makeMesh(geomName);
     }
 
     updateAnimate() {
@@ -63,5 +57,10 @@ export default class RootScene {
         this.renderer.render(this.scene, this.camera);
     }
     
-
+    resize() {
+        this.camera.aspect = window.innerWidth / window.innerHeight
+        this.camera.updateProjectionMatrix()
+        this.renderer.setSize(window.innerWidth, window.innerHeight)
+        this.render()
+    }
 }

@@ -1,11 +1,43 @@
 // this module contains all classes for geometries
 import * as THREE from 'three'
 
-
-class GeometryBase {
-    private _geometry!: THREE.BufferGeometry;
+/* meshWrapper creates the mesh to be added to the scene
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+class meshWrapper {
     private _material!: THREE.MeshBasicMaterial;
+    public get material(): THREE.MeshBasicMaterial {
+        return this._material;
+    }
+    public set material(value: THREE.MeshBasicMaterial) {
+        this._material = value;
+    }
+    
     private _mesh!: THREE.Mesh;
+    public get mesh(): THREE.Mesh {
+        return this._mesh;
+    }
+    public set mesh(value: THREE.Mesh) {
+        this._mesh = value;
+    }
+
+    constructor(geometry: THREE.BufferGeometry){
+        // const geometry = new THREE.SphereGeometry( 1, 24, 24 );
+        this.material = new THREE.MeshBasicMaterial({
+            color: 0x00ff00,
+            wireframe: true
+        })
+        this.mesh = new THREE.Mesh(geometry, this.material)
+    }
+}
+
+
+
+/* create the requested mesh
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ */
+class Factory {
+    private _geometry!: THREE.BufferGeometry;
 
     public get geometry(): THREE.BufferGeometry {
         return this._geometry;
@@ -14,104 +46,36 @@ class GeometryBase {
         this._geometry = value;
     }
     
-    public get material(): THREE.MeshBasicMaterial {
-        return this._material;
-    }
-    public set material(value: THREE.MeshBasicMaterial) {
-        this._material = value;
-    }
-
-    public get mesh(): THREE.Mesh {
-        return this._mesh;
-    }
-    public set mesh(value: THREE.Mesh) {
-        this._mesh = value;
-    }
-
-    constructor() {
-        console.log("GeometryBase Constructor called")
-        this.geometry = new THREE.BufferGeometry();
-        this.material  = new THREE.MeshBasicMaterial();
-        this.mesh  = new THREE.Mesh();
-    
-    }
-
-};
-
-
-class Box extends GeometryBase {
-    constructor() {
-        super();
-        console.log("Box  Constructor called")
-
-        this.geometry =  new THREE.BoxGeometry( 1, 1, 1 );
-        this.material = new THREE.MeshBasicMaterial({
-            color: 0x00ff77,
-            wireframe: true,
-        })
-        this.mesh = new THREE.Mesh(this.geometry, this.material)
-    }
-};
-
-class Sphere extends GeometryBase {
-    constructor() {
-        super();
-        console.log("Box  Constructor called")
-
-        this.geometry =  new THREE.SphereGeometry( 15, 32, 16 );
-        this.material = new THREE.MeshBasicMaterial({
-            color: 0x00ff77,
-            wireframe: true,
-        })
-        this.mesh = new THREE.Mesh(this.geometry, this.material)
-    }
-};
-
-class TorusKnot extends GeometryBase {
-    constructor() {
-        super();
-        console.log("Box  Constructor called")
-
-        this.geometry =  new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
-        this.material = new THREE.MeshBasicMaterial({
-            color: 0x00ff77,
-            wireframe: true,
-        })
-        this.mesh = new THREE.Mesh(this.geometry, this.material)
-    }
-};
-
-
-
-class Factory {
-    private _geometry: GeometryBase;
-
-    public get geometry() {
-        return this._geometry;
-    }
-
     constructor(typeOfObject: string){
-        this._geometry = new GeometryBase();
+        this.changeGeometry(typeOfObject);
+    }
 
+    changeGeometry(typeOfObject: string) {
         switch (typeOfObject) {
             case "Box":
-                console.log("Box will be created!")
-                this._geometry = new Box();
+                this._geometry = new THREE.BoxGeometry( 1, 1, 1 );
                 break;
             case "Sphere":
-                console.log("Sphere will be created!")
-                this._geometry = new Sphere();
+                this._geometry = new THREE.SphereGeometry( 15, 32, 16 );
                 break;
             case "TorusKnot":
-                console.log("TorusKnot will be created!")
-                this._geometry = new TorusKnot();
+                this._geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
                 break;
             default:
-                console.log("It is immpossible to press here !!!")
                 break;
         }
     }
 }
 
 
-export default Factory;
+const makeMesh = (geometryName: string): THREE.Mesh => {
+    const geometry = new THREE.SphereGeometry( 1, 24, 24 );
+    const material = new THREE.MeshBasicMaterial({
+        color: 0xff7733,
+        wireframe: true
+    })
+    const object = new THREE.Mesh(geometry, material)
+    return object;
+};
+
+export default makeMesh;
