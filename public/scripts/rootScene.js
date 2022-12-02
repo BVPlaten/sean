@@ -3,47 +3,62 @@ import * as THREE from 'three';
 import { OrbitControls } from '../jsm/controls/OrbitControls.js';
 import Stats from '../jsm/libs/stats.module.js';
 import { GUI } from '../jsm/libs/lil-gui.module.min.js';
-import makeMesh from './geomFactory.js';
-export default class RootScene {
+import { changeGeometry } from './geomFactory.js';
+import model from './model.js';
+export default class PlayField {
     constructor() {
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-        this.camera.position.z = 2;
-        this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.components = new model();
+        this.components.scene = new THREE.Scene();
+        this.components.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+        this.components.camera.position.z = 2;
+        this.components.renderer = new THREE.WebGLRenderer();
+        this.components.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(this.components.renderer.domElement);
+        this.components.controls = new OrbitControls(this.components.camera, this.components.renderer.domElement);
         // ****
-        this.scene.add(this.switchGeometry("Box"));
+        this.components.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+        /*
+        this.components.mesh = new THREE.Mesh(this.components.geometry, this.components.material );
+        this.components.scene.add(this.components.mesh)
+        */
+        this.switchGeometry("Box");
         // ****
-        this.stats = Stats();
-        document.body.appendChild(this.stats.dom);
-        this.gui = new GUI();
-        const cubeFolder = this.gui.addFolder('Cube');
+        this.components.stats = Stats();
+        document.body.appendChild(this.components.stats.dom);
+        this.components.gui = new GUI();
+        const cubeFolder = this.components.gui.addFolder('Cube');
         /*
         cubeFolder.add(cube.scale, 'x', -5, 5)
         cubeFolder.add(cube.scale, 'y', -5, 5)
         cubeFolder.add(cube.scale, 'z', -5, 5)
         */
         cubeFolder.open();
-        const cameraFolder = this.gui.addFolder('Camera');
-        cameraFolder.add(this.camera.position, 'z', 0, 10);
+        const cameraFolder = this.components.gui.addFolder('Camera');
+        cameraFolder.add(this.components.camera.position, 'z', 0, 10);
         cameraFolder.open();
     }
     switchGeometry(geomName) {
-        return makeMesh(geomName);
+        if (this.components.geometry != undefined) {
+            this.components.geometry.dispose();
+        }
+        this.components.geometry = changeGeometry(geomName);
+        this.components.mesh = new THREE.Mesh(this.components.geometry, this.components.material);
+        this.components.scene.clear();
+        this.components.scene.add(this.components.mesh);
     }
     updateAnimate() {
-        this.controls.update();
-        this.stats.update();
+        this.components.mesh.rotation.x += Math.PI / 270;
+        this.components.mesh.rotation.y += Math.PI / 360;
+        this.components.controls.update();
+        this.components.stats.update();
     }
     render() {
-        this.renderer.render(this.scene, this.camera);
+        this.components.renderer.render(this.components.scene, this.components.camera);
     }
     resize() {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.components.camera.aspect = window.innerWidth / window.innerHeight;
+        this.components.camera.updateProjectionMatrix();
+        this.components.renderer.setSize(window.innerWidth, window.innerHeight);
         this.render();
     }
 }
