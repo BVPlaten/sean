@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from '../jsm/controls/OrbitControls.js'
 import Stats from '../jsm/libs/stats.module.js'
 import { GUI } from '../jsm/libs/lil-gui.module.min.js'
-import makeMesh from './geomFactory'
+import makeMesh from './geomFactory.js'
 
 export default class RootScene {
     scene! :THREE.Scene;

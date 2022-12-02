@@ -55,12 +55,8 @@ class Factory {
     }
 }
 const makeMesh = (geometryName) => {
-    const geometry = new THREE.SphereGeometry(1, 24, 24);
-    const material = new THREE.MeshBasicMaterial({
-        color: 0xff7733,
-        wireframe: true
-    });
-    const object = new THREE.Mesh(geometry, material);
-    return object;
+    const geomCreate = new Factory(geometryName);
+    const mesh = new meshWrapper(geomCreate.geometry);
+    return mesh.mesh;
 };
 export default makeMesh;
