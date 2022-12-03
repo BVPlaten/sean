@@ -20,7 +20,10 @@
     <script type="importmap">
         {
             "imports": {
-                "three": "./build/three.module.js" 
+                "three": "./build/three.module.js",
+                "OrbitControls": "./threebase/examples/jsm/controls/OrbitControls.js",
+                "stats": "./threebase/examples/jsm/libs/stats.module.js",
+                "gui": "./threebase/examples/jsm/libs/lil-gui.module.min.js"
             }
         }
     </script>    
@@ -33,10 +36,6 @@
         <button class="btn" type="button" id="box">Box</button>
         <button class="btn" type="button" id="sphere">Sphere</button>
         <button class="btn" type="button" id="torusknot">TorusKnot</button>
-        <button>Hallo</button>
-        <p>Das ist ein Absatz</p>
-        <h1>Große Überschrift</h1>
-        <h4>kleine Überschrift</h4>
     </div>    
 
     <script type="module" src="./scripts/main.js"></script>
