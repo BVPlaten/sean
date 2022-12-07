@@ -1,6 +1,6 @@
 // this module contains all classes for geometries
 import * as THREE from 'three'
-import model from './model.js'
+import model from './Root.js'
 
 /* create the requested mesh
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

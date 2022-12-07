@@ -1,9 +1,10 @@
 import * as THREE from 'three';
-import { SceneContainer } from './model.js';
+import { ThreeRootSingleton } from './Root.js'
+
 
 // example to load a scene created with the three.js editor online : https://threejs.org/editor/
-export function startLoad(model: SceneContainer) {
-    model.scene.clear(); 
+export default function LoadModel(root : ThreeRootSingleton) {
+    root.scene.clear(); 
 
     const Loader = new THREE.ObjectLoader();
     Loader.load(
@@ -14,7 +15,7 @@ export function startLoad(model: SceneContainer) {
         // Here the loaded data is assumed to be an object
         function ( obj ) {
             // Add the loaded object to the scene
-            model.scene.add( obj );
+            root.scene.add( obj );
         },
     
         // onProgress callback

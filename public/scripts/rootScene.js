@@ -4,8 +4,9 @@ import { OrbitControls } from 'OrbitControls';
 import Stats from 'stats';
 import { GUI } from 'gui';
 import { changeGeometry } from './geomFactory.js';
-import { SceneContainer } from './model.js';
-export default class PlayField {
+class ObjectSwitch {
+}
+export class LoadObjectFrom {
     get m() {
         return this._m;
     }

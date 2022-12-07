@@ -5,10 +5,20 @@ import Stats from 'stats';
 import { GUI } from 'gui';
 
 import { changeGeometry } from './geomFactory.js'
-import { SceneContainer } from './model.js'
+import { ThreeRootSingleton } from './Root.js'
 
 
-export default class PlayField {
+
+
+
+
+class ObjectSwitch {
+    private const LoadedThreeDim: ThreeRootSingleton;
+}
+
+
+
+export class LoadObjectFrom {
     private _m: SceneContainer = new SceneContainer();
     public get m(): SceneContainer {
         return this._m;
