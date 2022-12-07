@@ -21,6 +21,8 @@
         {
             "imports": {
                 "three": "./build/three.module.js",
+                "controls": "./threebase/examples/jsm/controls",
+                "libs": "./threebase/examples/jsm/libs", 
                 "OrbitControls": "./threebase/examples/jsm/controls/OrbitControls.js",
                 "stats": "./threebase/examples/jsm/libs/stats.module.js",
                 "gui": "./threebase/examples/jsm/libs/lil-gui.module.min.js"
@@ -30,14 +32,15 @@
 
 </head>
 <body>
+    <script type="module" src="./scripts/main.js"></script>
+
     <div style="position: absolute; bottom: 5%; right: 20%; color: #fff;">
         <p>selection</p>
         
         <button class="btn" type="button" id="box">Box</button>
         <button class="btn" type="button" id="sphere">Sphere</button>
         <button class="btn" type="button" id="torusknot">TorusKnot</button>
+        <button type="button" id="loadscene">Load Scene</button>
     </div>    
-
-    <script type="module" src="./scripts/main.js"></script>
 </body>
 </html>

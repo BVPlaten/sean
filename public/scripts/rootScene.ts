@@ -1,77 +1,79 @@
 // the canvas
 import * as THREE from 'three'
-import { OrbitControls } from 'OrbitControls'
-import Stats from 'stats'
-import { GUI } from 'gui'
+import { OrbitControls } from 'OrbitControls';
+import Stats from 'stats';
+import { GUI } from 'gui';
 
 import { changeGeometry } from './geomFactory.js'
-import model from './model.js'
+import { SceneContainer } from './model.js'
 
 
 export default class PlayField {
-    private components: model = new model();
+    private _m: SceneContainer = new SceneContainer();
+    public get m(): SceneContainer {
+        return this._m;
+    }
+    public set m(value: SceneContainer) {
+        this._m = value;
+    }
 
     constructor() {
-        this.components.scene = new THREE.Scene()
-        this.components.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
-        this.components.camera.position.z = 2
+        this.m.scene = new THREE.Scene()
+        this.m.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
+        this.m.camera.position.z = 2
         
-        this.components.renderer = new THREE.WebGLRenderer()
-        this.components.renderer.setSize(window.innerWidth, window.innerHeight)
-        document.body.appendChild(this.components.renderer.domElement)
+        this.m.renderer = new THREE.WebGLRenderer()
+        this.m.renderer.setSize(window.innerWidth, window.innerHeight)
+        document.body.appendChild(this.m.renderer.domElement)
         
-        this.components.controls = new OrbitControls(this.components.camera, this.components.renderer.domElement)
+        this.m.controls = new OrbitControls(this.m.camera, this.m.renderer.domElement)
         
         // ****
-        this.components.material = new THREE.MeshBasicMaterial({color: 0x00ff00,wireframe: true})
-        /*
-        this.components.mesh = new THREE.Mesh(this.components.geometry, this.components.material );
-        this.components.scene.add(this.components.mesh)
-        */
-       this.switchGeometry("Box");
-        // ****
+        this.m.material = new THREE.MeshBasicMaterial({color: 0x00ff00,wireframe: true})
+
+        this.switchGeometry("Box");
         
-        this.components.stats = Stats()
-        document.body.appendChild(this.components.stats.dom)
+        this.m.stats = Stats()
+        document.body.appendChild(this.m.stats.dom)
         
-        this.components.gui = new GUI()
-        const cubeFolder = this.components.gui.addFolder('Cube')
-        /*
-        cubeFolder.add(cube.scale, 'x', -5, 5)
-        cubeFolder.add(cube.scale, 'y', -5, 5)
-        cubeFolder.add(cube.scale, 'z', -5, 5)
-        */
+        this.m.gui = new GUI()
+        const cubeFolder = this.m.gui.addFolder('Cube')
+
         cubeFolder.open()
-        const cameraFolder = this.components.gui.addFolder('Camera')
-        cameraFolder.add(this.components.camera.position, 'z', 0, 10)
+        const cameraFolder = this.m.gui.addFolder('Camera')
+        cameraFolder.add(this.m.camera.position, 'z', 0, 10)
         cameraFolder.open()
     }
 
     switchGeometry(geomName: string): void{
-        if(this.components.geometry != undefined){
-            this.components.geometry.dispose();
+        if(this.m.geometry != undefined){
+            this.m.geometry.dispose();
         }
-        this.components.geometry = changeGeometry(geomName);
-        this.components.mesh = new THREE.Mesh(this.components.geometry, this.components.material );
-        this.components.scene.clear();
-        this.components.scene.add(this.components.mesh)
+        this.m.geometry = changeGeometry(geomName);
+        this.m.mesh = new THREE.Mesh(this.m.geometry, this.m.material );
+        this.m.scene.clear();
+        this.m.scene.add(this.m.mesh)
     }
 
     updateAnimate() {
-        this.components.mesh.rotation.x += Math.PI / 270;
-        this.components.mesh.rotation.y += Math.PI / 360;
-        this.components.controls.update()
-        this.components.stats.update()
+        this.m.mesh.rotation.x += Math.PI / 270;
+        this.m.mesh.rotation.y += Math.PI / 360;
+        this.m.controls.update()
+        this.m.stats.update()
     }
 
     render() {
-        this.components.renderer.render(this.components.scene, this.components.camera);
+        this.m.renderer.render(this.m.scene, this.m.camera);
     }
     
     resize() {
-        this.components.camera.aspect = window.innerWidth / window.innerHeight
-        this.components.camera.updateProjectionMatrix()
-        this.components.renderer.setSize(window.innerWidth, window.innerHeight)
+        this.m.camera.aspect = window.innerWidth / window.innerHeight
+        this.m.camera.updateProjectionMatrix()
+        this.m.renderer.setSize(window.innerWidth, window.innerHeight)
         this.render()
+    }
+
+    getScene() {
+        return this.m.scene;
     }
 }
