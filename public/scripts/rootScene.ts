@@ -5,7 +5,7 @@ import Stats from 'stats';
 import { GUI } from 'gui';
 
 import { changeGeometry } from './geomFactory.js'
-import { ThreeRootSingleton } from './Root.js'
+import { rootThree } from './Root.js'
 
 
 
