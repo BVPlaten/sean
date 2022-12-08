@@ -2,33 +2,43 @@ import * as THREE from 'three'
 import { OrbitControls } from 'OrbitControls';
 import Stats from 'stats';
 import { GUI } from 'gui';
-import PlayField from './rootScene.js';
-import { startLoad } from './objectloadertest.js'
+import { rootThree } from './Root.js'
+import { LoadModel, SwitchGeomtry } from './buttonHandler.js'
 
 // https://stackoverflow.com/questions/68462419/three-js-breaks-when-trying-to-import-orbitcontrols-js
 // https://medium.com/threejs/module-specifiers-versus-relative-import-references-fd747980ba6f
 
-let rootScene = new PlayField();
-
+/*
+ button handler to start the load object function
+ */
 const button = document.getElementById('loadscene');
 button?.addEventListener('click', (event) => {
-    console.log("loading scene!");
-    startLoad(rootScene.m);
+    LoadModel();
 })
 
-
-function animate() {
-    requestAnimationFrame(animate)
-    rootScene.updateAnimate();
-    rootScene.render();
-}
-
-//add event handling for the buttons
-const btns = Array.prototype.slice.call(document.getElementsByClassName("btn"));
+/*
+ button handler to switch between objects
+ */
+const btns = Array.prototype.slice.call(document.getElementsByClassName("geomswitch"));
 btns.forEach(button => {
     button.addEventListener("click", (e: { target: { innerText: any } }) => {
-        rootScene.switchGeometry(e.target.innerText);
+        SwitchGeomtry(e.target.innerText)
     })
 });
 
+/*
+ window resize function 
+ */
+window.addEventListener('resize', onWindowResize, false)
+function onWindowResize() {
+    rootThree.rezise();
+}
+
+/*
+ the animaotion is an endless loop of displaying frames on the screen
+ */
+function animate() {
+    requestAnimationFrame(animate)
+    rootThree.render();
+}
 animate()

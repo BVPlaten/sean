@@ -105,6 +105,6 @@
     "moduleResolution": "node",
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["public/**/*", "obsolete/geomBox.ts"],
+  "include": ["public/**/*", "obsolete/geomBox.ts", "obsolete/rootScene.ts"],
   "exclude": ["node_modules", "obsolete"]
 }
