@@ -1,10 +1,11 @@
 import * as THREE from 'three';
-import { ThreeRootSingleton } from './Root.js'
+import { rootThree } from './Root.js'
 
-
-// example to load a scene created with the three.js editor online : https://threejs.org/editor/
-export default function LoadModel(root : ThreeRootSingleton) {
-    root.scene.clear(); 
+/*
+    example to load a scene created with the three.js editor online : https://threejs.org/editor/ 
+ */
+export function LoadModel() {
+    rootThree.scene.clear(); 
 
     const Loader = new THREE.ObjectLoader();
     Loader.load(
@@ -15,7 +16,7 @@ export default function LoadModel(root : ThreeRootSingleton) {
         // Here the loaded data is assumed to be an object
         function ( obj ) {
             // Add the loaded object to the scene
-            root.scene.add( obj );
+            rootThree.scene.add( obj );0
         },
     
         // onProgress callback
@@ -28,8 +29,15 @@ export default function LoadModel(root : ThreeRootSingleton) {
             console.error( 'An error happened' );
         }
     );
+    // Alternatively, to parse a previously loaded JSON structure
+    // const object = loader.parse( a_json_object );
+    // scene.add( object );
 }
 
-// Alternatively, to parse a previously loaded JSON structure
-//const object = loader.parse( a_json_object );
-//scene.add( object );
+/* 
+    function that switches the geometry by a given id
+ */
+export function SwitchGeomtry(geomId: string){
+    console.log(`SwitchGeomtry function called with ${geomId}`);
+    rootThree.scene.clear(); 
+}
