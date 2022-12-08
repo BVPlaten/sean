@@ -44,19 +44,30 @@ class ThreeRootSingleton {
     /*
         move the location of the camera to a random point
      */
-    moveCamera() {
+    tellMeAll() {
+        this.scene.traverse(function (object) {
+            if (object instanceof THREE.Mesh)
+                console.log(object);
+        });
     }
     /*
        render() is called to create a new frame in the animation
     */
     render() {
         this.rendr.render(this.scene, this.cam);
-        this.update();
+        this.update('RotationObject');
     }
     /*
         update() changes the objects in the scene that should be animated somehow
+        https://www.becomebetterprogrammer.com/typescript-pass-function-as-a-parameter/
      */
-    update() {
+    update(objName) {
+        const animObj = rootThree.scene.getObjectByName(objName);
+        if (animObj != null) {
+            animObj.rotation.x += Math.PI / 270;
+            animObj.rotation.y += Math.PI / 360;
+            animObj.rotation.z += Math.PI / 180;
+        }
     }
     /*
        rezize the canvas if the window size was changed
@@ -69,6 +80,6 @@ class ThreeRootSingleton {
     }
 }
 /*
- rootThree is the container for the main Three.js components
+ rootThree is the container for the main Three.js components. it is a singleton, reused in all modules
  */
 export const rootThree = ThreeRootSingleton.getInstance();

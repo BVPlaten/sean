@@ -4,8 +4,8 @@ import { OrbitControls } from 'OrbitControls';
 import Stats from 'stats';
 import { GUI } from 'gui';
 
-import { changeGeometry } from './geomFactory.js'
-import { rootThree } from './Root.js'
+import { changeGeometry } from '../public/scripts/geomFactory.js'
+import { rootThree } from '../public/scripts/Root.js'
 
 
 

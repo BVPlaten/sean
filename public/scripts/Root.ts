@@ -10,19 +10,20 @@ class ThreeRootSingleton {
     private _cam: THREE.PerspectiveCamera;
     private _scene: THREE.Scene;
 
-
     public get rendr(): THREE.WebGLRenderer {
         return this._rendr;
     }
     public set rendr(value: THREE.WebGLRenderer) {
         this._rendr = value;
     }
+
     public get cam(): THREE.PerspectiveCamera {
         return this._cam;
     }
     public set cam(value: THREE.PerspectiveCamera) {
         this._cam = value;
     }
+
     public get scene(): THREE.Scene {
         return this._scene;
     }
@@ -38,7 +39,6 @@ class ThreeRootSingleton {
 
         this.rendr.setSize(window.innerWidth, window.innerHeight)
         document.body.appendChild(this.rendr.domElement)
-        
 
         this._cam = new THREE.PerspectiveCamera(
             75,
@@ -47,7 +47,6 @@ class ThreeRootSingleton {
             1000
         )
         this.cam.position.z = 3
-
         this._ctrls = new OrbitControls( this.cam, this.rendr.domElement )
     }
 
@@ -64,7 +63,12 @@ class ThreeRootSingleton {
     /* 
         move the location of the camera to a random point 
      */
-     public moveCamera() {
+     public tellMeAll() {
+        this.scene.traverse( function( object ) {
+
+            if ( object instanceof THREE.Mesh ) console.log( object );
+        
+        } );
     }
 
     /*
@@ -72,13 +76,20 @@ class ThreeRootSingleton {
     */
     public render() {
         this.rendr.render(this.scene, this.cam);
-        this.update();
+        this.update('RotationObject')
     }
 
     /*
         update() changes the objects in the scene that should be animated somehow
+        https://www.becomebetterprogrammer.com/typescript-pass-function-as-a-parameter/
      */
-    public update() {
+    public update(objName : string) {
+        const animObj = rootThree.scene.getObjectByName(objName);
+        if(animObj != null) {
+            animObj.rotation.x += Math.PI / 270;
+            animObj.rotation.y += Math.PI / 360;
+            animObj.rotation.z += Math.PI / 180;
+        }
     }
    
     /* 
@@ -94,7 +105,7 @@ class ThreeRootSingleton {
 }
 
 /*
- rootThree is the container for the main Three.js components
+ rootThree is the container for the main Three.js components. it is a singleton, reused in all modules
  */
 export const rootThree: ThreeRootSingleton = ThreeRootSingleton.getInstance();
 

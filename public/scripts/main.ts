@@ -3,7 +3,7 @@ import { OrbitControls } from 'OrbitControls';
 import Stats from 'stats';
 import { GUI } from 'gui';
 import { rootThree } from './Root.js'
-import { LoadModel, SwitchGeomtry } from './objectloadertest.js'
+import { LoadModel, SwitchGeomtry } from './buttonHandler.js'
 
 // https://stackoverflow.com/questions/68462419/three-js-breaks-when-trying-to-import-orbitcontrols-js
 // https://medium.com/threejs/module-specifiers-versus-relative-import-references-fd747980ba6f
@@ -32,11 +32,6 @@ btns.forEach(button => {
 window.addEventListener('resize', onWindowResize, false)
 function onWindowResize() {
     rootThree.rezise();
-
-    // rootThree.cam.aspect = window.innerWidth / window.innerHeight
-    // rootThree.cam.updateProjectionMatrix()
-    // rootThree.rendr.setSize(window.innerWidth, window.innerHeight)
-    // rootThree.render();
 }
 
 /*
