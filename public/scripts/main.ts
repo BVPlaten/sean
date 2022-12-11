@@ -26,8 +26,32 @@ btns.forEach(button => {
     })
 });
 
+/* 
+  button handler to controll the movement
+ */
+function trackKeys(keys :String[]) {
+	let down = Object.create(null);
+	function track(event: KeyboardEvent) {
+        // console.log(event.code);
+		if (keys.includes(event.code)) {
+			down[event.code] = event.type == "keydown";
+			event.preventDefault();
+		}
+	}
+	window.addEventListener("keydown", track);
+	window.addEventListener("keyup", track);
+	return down;
+}
+
+
+// export default function controllKeys() {
+//     //arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
+//     return trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
+// }
+export let controllKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space"]);
+
 /*
- window resize function 
+  window resize function 
  */
 window.addEventListener('resize', onWindowResize, false)
 function onWindowResize() {

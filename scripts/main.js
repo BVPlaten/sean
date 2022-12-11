@@ -18,27 +18,27 @@ btns.forEach(button => {
         SwitchGeomtry(e.target.innerText);
     });
 });
-/*
-  button handler to controll the movement
- */
-function trackKeys(keys) {
-    let down = Object.create(null);
-    function track(event) {
-        // console.log(event.code);
-        if (keys.includes(event.code)) {
-            down[event.code] = event.type == "keydown";
-            event.preventDefault();
-        }
-    }
-    window.addEventListener("keydown", track);
-    window.addEventListener("keyup", track);
-    return down;
-}
-// export default function controllKeys() {
-//     //arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
-//     return trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
+// /* 
+//   button handler to controll the movement
+//  */
+//   function trackKeys(keys) {
+// 	let down = Object.create(null);
+// 	function track(event) {
+// 		if (keys.includes(event.key)) {
+// 			down[event.key] = event.type == "keydown";
+// 			event.preventDefault();
+// 		}
+// 	}
+// 	window.addEventListener("keydown", track);
+// 	window.addEventListener("keyup", track);
+// 	return down;
 // }
-export let controllKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space"]);
+// const arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "q"]);
+document.addEventListener("keydown", (event) => {
+    if (event.key === "a") {
+        console.log(`Du hast die Taste ${event.code} gedrückt`);
+    }
+});
 /*
   window resize function
  */

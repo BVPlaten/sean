@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'OrbitControls';
+import { controllKeys } from './main.js';
+
 
 // the container contains the basic components of a 3D visualization
 // singleton : https://refactoring.guru/design-patterns/singleton/typescript/example
@@ -77,6 +79,7 @@ class ThreeRootSingleton {
     public render() {
         this.rendr.render(this.scene, this.cam);
         this.update('RotationObject')
+        this.controllerCheck('RotationObject');
     }
 
     /*
@@ -91,8 +94,34 @@ class ThreeRootSingleton {
             animObj.rotation.z += Math.PI / 180;
         }
     }
-   
-    /* 
+
+    /*
+     react to keyboard press event
+     */
+    controllerCheck(objName : string) {
+        // console.log(controllKeys);
+        const animObj = rootThree.scene.getObjectByName(objName);
+        if(animObj === null) {
+            return; 
+        }
+        else {
+            if(controllKeys['ArrowUp'] === true) {
+                animObj!.position.y +=.01;
+            }
+            if(controllKeys['ArrowDown'] === true) {
+                animObj!.position.y -=.01;
+            }
+            if(controllKeys['ArrowRight'] === true) {
+                animObj!.position.x +=.01;
+            }
+            if(controllKeys['ArrowLeft'] === true) {
+                animObj!.position.x -=.01;
+            }
+        }
+    } 
+
+
+    /*
        rezize the canvas if the window size was changed
      */
     public rezise() {
