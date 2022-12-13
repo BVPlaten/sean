@@ -1,17 +1,19 @@
 import * as THREE from 'three';
-import { rootThree } from './Root.js'
-import { changeGeometry } from './geomFactory.js'
+import { rootThree, ThreeRootSingleton } from './Root.js'
+import { changeGeometry, singleGeometryRender } from './singleGeometry.js'
+import consumeThePillsRender from './ConsumeThePills.js'
 
 /*
     example to load a scene created with the three.js editor online : https://threejs.org/editor/ 
  */
 export function LoadModel() {
-    rootThree.scene.clear(); 
+    rootThree.scene.clear();
+    consumeThePillsRender(rootThree); 
 
     const Loader = new THREE.ObjectLoader();
     Loader.load(
         // resource URL
-        "./scripts/scene_test.json",
+        "./scripts/scene_play.json",
     
         // onLoad callback
         // Here the loaded data is assumed to be an object
@@ -40,6 +42,7 @@ export function LoadModel() {
  */
 export function SwitchGeomtry(geomId: string){
     rootThree.scene.clear(); 
+    singleGeometryRender(rootThree);
 
     const geom: THREE.BufferGeometry = changeGeometry(geomId);
     const mtrl: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00,wireframe: true})
@@ -47,10 +50,4 @@ export function SwitchGeomtry(geomId: string){
     const mesh = new THREE.Mesh(geom, mtrl );
     mesh.name = 'RotationObject';
     rootThree.scene.add(mesh);
-
-    /*
-    rootThree.scene.traverse(function(child){
-        console.log(child);
-    });
-    */
 }

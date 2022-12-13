@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { rootThree } from './Root.js';
 /*
    create the requested mesh
  */
@@ -20,5 +21,13 @@ function changeGeometry(componentName) {
     }
     return objToAdd;
 }
-export { changeGeometry };
-//# sourceMappingURL=geomFactory.js.map
+function singleGeometryRender(obj) {
+    let renderOneGeometry = (obj) => {
+        obj.rendr.render(obj.scene, obj.cam);
+        obj.update('RotationObject');
+        obj.controllerCheck('RotationObject');
+    };
+    rootThree.renderFunc = renderOneGeometry;
+}
+export { changeGeometry, singleGeometryRender };
+//# sourceMappingURL=singleGeometry.js.map

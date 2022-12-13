@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { rootThree, ThreeRootSingleton } from './Root.js'
 
 /* 
    create the requested mesh
@@ -22,4 +23,15 @@ function changeGeometry(componentName: string): THREE.BufferGeometry {
     return objToAdd;
 }
 
-export { changeGeometry };
+
+function singleGeometryRender(obj: ThreeRootSingleton){
+    
+    let renderOneGeometry = (obj: ThreeRootSingleton) => {
+        obj.rendr.render(obj.scene, obj.cam);
+        obj.update('RotationObject')
+        obj.controllerCheck('RotationObject');
+    }
+    rootThree.renderFunc = renderOneGeometry;
+}
+
+export { changeGeometry, singleGeometryRender };
