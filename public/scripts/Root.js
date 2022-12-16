@@ -43,12 +43,15 @@ export class ThreeRootSingleton {
         this._rendr = new THREE.WebGLRenderer();
         this.rendr.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.rendr.domElement);
-        this._cam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        let perspct = window.innerWidth / window.innerHeight;
+        this._cam = new THREE.PerspectiveCamera(75, perspct, 0.1, 1000);
         this.cam.position.set(5, 6, -12);
         this.ctrls = new OrbitControls(this.cam, this.rendr.domElement);
+        /*
         this.ctrls.addEventListener("change", event => {
-            console.log(this.ctrls.object.position);
+            console.log( this.ctrls.object.position )
         });
+        */
     }
     /*
        singelton pattern

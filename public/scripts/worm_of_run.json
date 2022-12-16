@@ -1,0 +1,228 @@
+{
+	"metadata": {
+		"version": 4.5,
+		"type": "Object",
+		"generator": "Object3D.toJSON"
+	},
+	"geometries": [
+		{
+			"uuid": "b9452fd9-c46a-475f-a7fe-6cd24b6436ab",
+			"type": "PlaneGeometry",
+			"width": 1,
+			"height": 1,
+			"widthSegments": 1,
+			"heightSegments": 1
+		},
+		{
+			"uuid": "36e078ed-b926-4ede-93c6-181a3988ced9",
+			"type": "BoxGeometry",
+			"width": 1,
+			"height": 1,
+			"depth": 1,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
+		},
+		{
+			"uuid": "729f8646-ae20-4838-85a0-dd5c940591ae",
+			"type": "SphereGeometry",
+			"radius": 1,
+			"widthSegments": 32,
+			"heightSegments": 16,
+			"phiStart": 0,
+			"phiLength": 6.283185307179586,
+			"thetaStart": 0,
+			"thetaLength": 3.141592653589793
+		}],
+	"materials": [
+		{
+			"uuid": "b6691e3d-4b21-436e-9593-29983027e86e",
+			"type": "MeshBasicMaterial",
+			"color": 7238682,
+			"reflectivity": 1,
+			"refractionRatio": 0.98,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"colorWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		},
+		{
+			"uuid": "3c4006dd-49b2-4920-9ed1-2c12fd6764cd",
+			"type": "MeshStandardMaterial",
+			"color": 13781835,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 0,
+			"envMapIntensity": 1,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"colorWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		},
+		{
+			"uuid": "de5156b7-a1f6-4e31-b815-493ae08f9efb",
+			"type": "MeshStandardMaterial",
+			"color": 4730766,
+			"roughness": 1,
+			"metalness": 0.58,
+			"emissive": 4078971,
+			"envMapIntensity": 1,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"colorWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		}],
+	"object": {
+		"uuid": "8c5e18cf-604d-4804-a38f-603a9f8ad96e",
+		"type": "Scene",
+		"name": "Scene",
+		"layers": 1,
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+		"background": 9492990,
+		"children": [
+			{
+				"uuid": "beb8fc3e-630c-4e8d-9bdf-557e9d78efbd",
+				"type": "Mesh",
+				"name": "FloorObj",
+				"receiveShadow": true,
+				"frustumCulled": false,
+				"layers": 1,
+				"matrix": [32,0,0,0,0,7.105427357601002e-15,-32,0,0,1,2.220446049250313e-16,0,0,-0.75,0,1],
+				"geometry": "b9452fd9-c46a-475f-a7fe-6cd24b6436ab",
+				"material": "b6691e3d-4b21-436e-9593-29983027e86e"
+			},
+			{
+				"uuid": "1f506c5b-bc6a-4ca7-8e1f-db5b2a5e43e9",
+				"type": "HemisphereLight",
+				"name": "HemisphereLight",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,10,0,1],
+				"color": 43775,
+				"intensity": 1,
+				"groundColor": 16755200
+			},
+			{
+				"uuid": "ed7808a8-b1fd-4bbc-8693-299730cbeeb3",
+				"type": "Mesh",
+				"name": "PlayerBoxObj",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+				"geometry": "36e078ed-b926-4ede-93c6-181a3988ced9",
+				"material": "3c4006dd-49b2-4920-9ed1-2c12fd6764cd"
+			},
+			{
+				"uuid": "7fa1089b-fbb7-4cd6-9195-19e5bb7e3f6e",
+				"type": "DirectionalLight",
+				"name": "DirectionalLight",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,5,10,7.5,1],
+				"color": 16777215,
+				"intensity": 1,
+				"shadow": {
+					"camera": {
+						"uuid": "8a921fe9-edf3-479a-bcbe-066d458da855",
+						"type": "OrthographicCamera",
+						"layers": 1,
+						"zoom": 1,
+						"left": -5,
+						"right": 5,
+						"top": 5,
+						"bottom": -5,
+						"near": 0.5,
+						"far": 500
+					}
+				}
+			},
+			{
+				"uuid": "63721bb6-1b2d-4491-b30a-1d1e810bfd4e",
+				"type": "Mesh",
+				"name": "Pill1Obj",
+				"castShadow": true,
+				"receiveShadow": true,
+				"layers": 1,
+				"matrix": [0.4,0,0,0,0,0.4,0,0,0,0,0.4,0,2,0,2,1],
+				"geometry": "729f8646-ae20-4838-85a0-dd5c940591ae",
+				"material": "de5156b7-a1f6-4e31-b815-493ae08f9efb"
+			},
+			{
+				"uuid": "245c14e6-a596-4e6b-b7dd-ed760209699c",
+				"type": "Mesh",
+				"name": "Pill2Obj",
+				"castShadow": true,
+				"receiveShadow": true,
+				"layers": 1,
+				"matrix": [0.4,0,0,0,0,0.4,0,0,0,0,0.4,0,4,0,-14,1],
+				"geometry": "729f8646-ae20-4838-85a0-dd5c940591ae",
+				"material": "de5156b7-a1f6-4e31-b815-493ae08f9efb"
+			},
+			{
+				"uuid": "20407e34-0b36-47c7-ad6c-0fe4bb1e647d",
+				"type": "Mesh",
+				"name": "Pill3Obj",
+				"castShadow": true,
+				"receiveShadow": true,
+				"frustumCulled": false,
+				"layers": 1,
+				"matrix": [0.4,0,0,0,0,0.4,0,0,0,0,0.4,0,-2,0,12,1],
+				"geometry": "729f8646-ae20-4838-85a0-dd5c940591ae",
+				"material": "de5156b7-a1f6-4e31-b815-493ae08f9efb"
+			},
+			{
+				"uuid": "5c2fde17-3b63-4d59-a1ef-f9ffa78b7075",
+				"type": "Mesh",
+				"name": "Pill4Obj",
+				"castShadow": true,
+				"receiveShadow": true,
+				"layers": 1,
+				"matrix": [0.4,0,0,0,0,0.4,0,0,0,0,0.4,0,-8,0,-12,1],
+				"geometry": "729f8646-ae20-4838-85a0-dd5c940591ae",
+				"material": "de5156b7-a1f6-4e31-b815-493ae08f9efb"
+			},
+			{
+				"uuid": "4d2057cd-1a04-476c-85ca-adc3553d4c05",
+				"type": "Mesh",
+				"name": "Pill5Obj",
+				"castShadow": true,
+				"receiveShadow": true,
+				"layers": 1,
+				"matrix": [0.4,0,0,0,0,0.4,0,0,0,0,0.4,0,-4,0,-10,1],
+				"geometry": "729f8646-ae20-4838-85a0-dd5c940591ae",
+				"material": "de5156b7-a1f6-4e31-b815-493ae08f9efb"
+			},
+			{
+				"uuid": "16e66b9c-58d5-4d2a-9ea2-75d9e4d98201",
+				"type": "Mesh",
+				"name": "Pill6Obj",
+				"castShadow": true,
+				"receiveShadow": true,
+				"layers": 1,
+				"matrix": [0.4,0,0,0,0,0.4,0,0,0,0,0.4,0,10,0,6,1],
+				"geometry": "729f8646-ae20-4838-85a0-dd5c940591ae",
+				"material": "de5156b7-a1f6-4e31-b815-493ae08f9efb"
+			}]
+	}
+}

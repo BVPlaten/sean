@@ -1,5 +1,7 @@
+import * as THREE from 'three';
 import { rootThree } from './Root.js';
-import { LoadModel, SwitchGeomtry } from './buttonHandler.js';
+import { changeGeometry, singleGeometryRender } from './singleGeometry.js';
+import { PillConsuming } from './PillConsuming.js';
 // https://stackoverflow.com/questions/68462419/three-js-breaks-when-trying-to-import-orbitcontrols-js
 // https://medium.com/threejs/module-specifiers-versus-relative-import-references-fd747980ba6f
 /*
@@ -7,7 +9,7 @@ import { LoadModel, SwitchGeomtry } from './buttonHandler.js';
  */
 const button = document.getElementById('loadscene');
 button === null || button === void 0 ? void 0 : button.addEventListener('click', (event) => {
-    LoadModel();
+    const game = new PillConsuming("./scripts/worm_of_run.json");
 });
 /*
  button handler to switch between objects
@@ -15,7 +17,14 @@ button === null || button === void 0 ? void 0 : button.addEventListener('click',
 const btns = Array.prototype.slice.call(document.getElementsByClassName("geomswitch"));
 btns.forEach(button => {
     button.addEventListener("click", (e) => {
-        SwitchGeomtry(e.target.innerText);
+        //SwitchGeomtry(e.target.innerText)
+        rootThree.scene.clear();
+        singleGeometryRender(rootThree);
+        const geom = changeGeometry(e.target.innerText);
+        const mtrl = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+        const mesh = new THREE.Mesh(geom, mtrl);
+        mesh.name = 'RotationObject';
+        rootThree.scene.add(mesh);
     });
 });
 /*
