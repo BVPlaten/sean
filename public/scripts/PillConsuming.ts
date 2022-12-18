@@ -64,7 +64,22 @@ export class PillConsuming {
      add the boundigs to the play-objects
      */
     addBoundings() {
-        throw new Error('Method not implemented.');
+        // create a list with all objects that needs a collision detection
+        const objectNames = new Array<string>();
+        objectNames.push('PlayerBoxObj');
+        objectNames.push('Pill1Obj');
+        objectNames.push('Pill2Obj');
+        objectNames.push('Pill3Obj');
+        objectNames.push('Pill4Obj');
+        objectNames.push('Pill5Obj');
+        objectNames.push('Pill6Obj');
+
+        const gameObj = rootThree.scene.getObjectByName(objectNames[0]);
+        gameObj?.clear();
+
+
+
+
     }
 
 }
