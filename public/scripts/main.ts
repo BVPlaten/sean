@@ -70,7 +70,7 @@ function onWindowResize() {
 }
 
 /*
- the animaotion is an endless loop of displaying frames on the screen
+ the animation is an endless loop of displaying frames on the screen
  */
 function animate() {
     requestAnimationFrame(animate)

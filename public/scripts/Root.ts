@@ -119,25 +119,38 @@ export class ThreeRootSingleton {
     controllerCheck(objName : string, step: number = .05) {
         // console.log(controllKeys);
         const animObj = rootThree.scene.getObjectByName(objName);
-        if(animObj === null) {
-            return; 
+        // if ((animObj === undefined) || (animObj === null)) {
+        //     return; 
+        // }
+        // else {
+        //     if(controllKeys['ArrowUp'] === true) {
+        //         animObj!.position.z += step;
+        //     }
+        //     if(controllKeys['ArrowDown'] === true) {
+        //         animObj!.position.z -= step;
+        //     }
+        //     if(controllKeys['ArrowRight'] === true) {
+        //         animObj!.position.x -= step;
+        //     }
+        //     if(controllKeys['ArrowLeft'] === true) {
+        //         animObj!.position.x += step;
+        //     }
+        // }
+        if ((animObj !== undefined) && (animObj !== null)) {
+             if(controllKeys['ArrowUp'] === true) {
+                 animObj!.position.z += step;
+             }
+             if(controllKeys['ArrowDown'] === true) {
+                 animObj!.position.z -= step;
+             }
+             if(controllKeys['ArrowRight'] === true) {
+                 animObj!.position.x -= step;
+             }
+             if(controllKeys['ArrowLeft'] === true) {
+                 animObj!.position.x += step;
+             }
         }
-        else {
-            if(controllKeys['ArrowUp'] === true) {
-                animObj!.position.z += step;
-            }
-            if(controllKeys['ArrowDown'] === true) {
-                animObj!.position.z -= step;
-            }
-            if(controllKeys['ArrowRight'] === true) {
-                animObj!.position.x -= step;
-            }
-            if(controllKeys['ArrowLeft'] === true) {
-                animObj!.position.x += step;
-            }
-        }
-    } 
-
+    }
 
     /*
        rezize the canvas if the window size was changed
