@@ -1,6 +1,13 @@
 import * as THREE from 'three';
-import { rootThree } from './Root.js';
-export class PillConsuming {
+import { world } from './ActionWorld.js';
+/*
+ * SceneCtrlr
+ *
+ * The Scene will become a simple clone of the worms game
+ *
+ *
+ */
+export default class SceneCtrlr {
     /*
      constructor
      Param: sceneFile : string : path with filename to load
@@ -9,18 +16,19 @@ export class PillConsuming {
         this.sceneFile = sceneFile;
         this.loadScene();
         this.addBoundings();
+        // a function called by the renderer 
         this.localRenderFunc = (obj) => {
             obj.rendr.render(obj.scene, obj.cam);
             this.moveBox(obj);
-            obj.update('RotationObject');
         };
-        rootThree.renderFunc = this.localRenderFunc;
+        // rendering is done in the world object
+        world.renderFunc = this.localRenderFunc;
     }
     /*
      load the JSON object with the scene definition
      */
     loadScene() {
-        rootThree.scene.clear();
+        world.scene.clear();
         //this.localRenderFunc(rootThree); 
         const Loader = new THREE.ObjectLoader();
         Loader.load(
@@ -29,7 +37,7 @@ export class PillConsuming {
         // onLoad callback
         // Here the loaded data is assumed to be an object
         function (obj) {
-            rootThree.scene.add(obj);
+            world.scene.add(obj);
             0;
         }, 
         // onProgress callback
@@ -61,8 +69,8 @@ export class PillConsuming {
         objectNames.push('Pill4Obj');
         objectNames.push('Pill5Obj');
         objectNames.push('Pill6Obj');
-        const gameObj = rootThree.scene.getObjectByName(objectNames[0]);
+        const gameObj = world.scene.getObjectByName(objectNames[0]);
         gameObj === null || gameObj === void 0 ? void 0 : gameObj.clear();
     }
 }
-//# sourceMappingURL=PillConsuming.js.map
+//# sourceMappingURL=SceneCtrlr.js.map

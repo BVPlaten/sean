@@ -1,8 +1,17 @@
 import * as THREE from 'three';
-import {rootThree, ThreeRootSingleton} from './Root.js'
+import {world, ActionWorld} from './ActionWorld.js'
 import {controllKeys} from './main.js'
 
-export class PillConsuming {
+
+/* 
+ * SceneCtrlr
+ *
+ * The Scene will become a simple clone of the worms game
+ * 
+ * 
+ */
+
+export default class SceneCtrlr {
     localRenderFunc: Function;
 
     /*
@@ -13,21 +22,21 @@ export class PillConsuming {
         this.loadScene();
         this.addBoundings()
 
-
-
-        this.localRenderFunc = (obj: ThreeRootSingleton) => {
+        // a function called by the renderer 
+        this.localRenderFunc = (obj: ActionWorld) => {
             obj.rendr.render(obj.scene, obj.cam);
             this.moveBox(obj);
-            obj.update('RotationObject')
         }
-        rootThree.renderFunc = this.localRenderFunc;
+
+        // rendering is done in the world object
+        world.renderFunc = this.localRenderFunc;
     }
 
     /*
      load the JSON object with the scene definition
      */
     loadScene(): void {
-        rootThree.scene.clear();
+        world.scene.clear();
         //this.localRenderFunc(rootThree); 
         const Loader = new THREE.ObjectLoader();
         Loader.load(
@@ -36,18 +45,18 @@ export class PillConsuming {
         
             // onLoad callback
             // Here the loaded data is assumed to be an object
-            function ( obj ) {
-                rootThree.scene.add( obj );0
+            function ( obj: any ) {
+                world.scene.add( obj );0
             },
         
             // onProgress callback
-            function ( xhr ) {
+            function ( xhr: any ) {
                 //console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
                 return;
             },
         
             // onError callback
-            function ( err ) {
+            function ( err: any ) {
                 console.error( 'An error happened' );
             }
         );
@@ -56,7 +65,7 @@ export class PillConsuming {
     /*
      move the box selected by its name controlled by the cursor keys
      */
-     moveBox(obj: ThreeRootSingleton) {
+     moveBox(obj: ActionWorld) {
         obj.controllerCheck('PlayerBoxObj', 0.33);
     }
 
@@ -74,12 +83,7 @@ export class PillConsuming {
         objectNames.push('Pill5Obj');
         objectNames.push('Pill6Obj');
 
-        const gameObj = rootThree.scene.getObjectByName(objectNames[0]);
+        const gameObj = world.scene.getObjectByName(objectNames[0]);
         gameObj?.clear();
-
-
-
-
     }
-
 }

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { rootThree } from './Root.js';
+import { world } from './ActionWorld.js';
 /*
-   create the requested mesh
+   function to create a single geometry for demo purpose
  */
 function changeGeometry(componentName) {
     let objToAdd;
@@ -27,7 +27,7 @@ function singleGeometryRender(obj) {
         obj.update('RotationObject');
         obj.controllerCheck('RotationObject');
     };
-    rootThree.renderFunc = renderOneGeometry;
+    world.renderFunc = renderOneGeometry;
 }
 export { changeGeometry, singleGeometryRender };
 //# sourceMappingURL=singleGeometry.js.map

@@ -3,7 +3,7 @@ import { OrbitControls } from 'OrbitControls';
 import { controllKeys } from './main.js';
 // the container contains the basic components of a 3D visualization
 // singleton : https://refactoring.guru/design-patterns/singleton/typescript/example
-export class ThreeRootSingleton {
+export class ActionWorld {
     get renderFunc() {
         return this._renderFunc;
     }
@@ -57,18 +57,18 @@ export class ThreeRootSingleton {
        singelton pattern
      */
     static getInstance(renderF) {
-        if (!ThreeRootSingleton.instance) {
-            ThreeRootSingleton.instance = new ThreeRootSingleton(renderF);
+        if (!ActionWorld.instance) {
+            ActionWorld.instance = new ActionWorld(renderF);
         }
-        return ThreeRootSingleton.instance;
+        return ActionWorld.instance;
     }
     /*
         move the location of the camera to a random point
      */
     tellMeAll() {
-        this.scene.traverse(function (object) {
-            if (object instanceof THREE.Mesh)
-                console.log(object);
+        this.scene.traverse((obj) => {
+            if (obj instanceof THREE.Mesh)
+                console.log(obj);
         });
     }
     /*
@@ -85,7 +85,7 @@ export class ThreeRootSingleton {
         https://www.becomebetterprogrammer.com/typescript-pass-function-as-a-parameter/
      */
     update(objName) {
-        const animObj = rootThree.scene.getObjectByName(objName);
+        const animObj = world.scene.getObjectByName(objName);
         if (animObj != null) {
             animObj.rotation.x += Math.PI / 270;
             animObj.rotation.y += Math.PI / 360;
@@ -94,27 +94,11 @@ export class ThreeRootSingleton {
     }
     /*
      react to keyboard press event
+     TODO the animation logic should be put to the scene-controller
      */
     controllerCheck(objName, step = .05) {
         // console.log(controllKeys);
-        const animObj = rootThree.scene.getObjectByName(objName);
-        // if ((animObj === undefined) || (animObj === null)) {
-        //     return; 
-        // }
-        // else {
-        //     if(controllKeys['ArrowUp'] === true) {
-        //         animObj!.position.z += step;
-        //     }
-        //     if(controllKeys['ArrowDown'] === true) {
-        //         animObj!.position.z -= step;
-        //     }
-        //     if(controllKeys['ArrowRight'] === true) {
-        //         animObj!.position.x -= step;
-        //     }
-        //     if(controllKeys['ArrowLeft'] === true) {
-        //         animObj!.position.x += step;
-        //     }
-        // }
+        const animObj = world.scene.getObjectByName(objName);
         if ((animObj !== undefined) && (animObj !== null)) {
             if (controllKeys['ArrowUp'] === true) {
                 animObj.position.z += step;
@@ -146,7 +130,9 @@ let renderStandart = (obj) => {
     obj.controllerCheck('RotationObject');
 };
 /*
- rootThree is the container for the main Three.js components. it is a singleton, reused in all modules
+ world is the container for the main Three.js components.
+ scene,camera,ligth,renderer and orbit-controls
+ it is a singleton, reused in all modules
  */
-export const rootThree = ThreeRootSingleton.getInstance(renderStandart);
-//# sourceMappingURL=Root.js.map
+export const world = ActionWorld.getInstance(renderStandart);
+//# sourceMappingURL=ActionWorld.js.map

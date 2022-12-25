@@ -2,10 +2,10 @@ import * as THREE from 'three'
 import { OrbitControls } from 'OrbitControls';
 import Stats from 'stats';
 import { GUI } from 'gui';
-import { rootThree } from './Root.js'
+import { world } from './ActionWorld.js'
 import { changeGeometry, singleGeometryRender } from './singleGeometry.js'
 import { SwitchGeomtry } from './buttonHandler.js'
-import { PillConsuming } from './PillConsuming.js';
+import SceneCtrlr from './SceneCtrlr.js';
 
 // https://stackoverflow.com/questions/68462419/three-js-breaks-when-trying-to-import-orbitcontrols-js
 // https://medium.com/threejs/module-specifiers-versus-relative-import-references-fd747980ba6f
@@ -15,7 +15,7 @@ import { PillConsuming } from './PillConsuming.js';
  */
 const button = document.getElementById('loadscene');
 button?.addEventListener('click', (event) => {
-    const game = new PillConsuming("./scripts/worm_of_run.json");
+    const game = new SceneCtrlr("./scripts/worm_of_run.json");
 })
 
 /*
@@ -25,15 +25,15 @@ const btns = Array.prototype.slice.call(document.getElementsByClassName("geomswi
 btns.forEach(button => {
     button.addEventListener("click", (e: { target: { innerText: any } }) => {
         //SwitchGeomtry(e.target.innerText)
-        rootThree.scene.clear(); 
-        singleGeometryRender(rootThree);
+        world.scene.clear(); 
+        singleGeometryRender(world);
     
         const geom: THREE.BufferGeometry = changeGeometry(e.target.innerText);
         const mtrl: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00,wireframe: true})
-    
+        
         const mesh = new THREE.Mesh(geom, mtrl );
         mesh.name = 'RotationObject';
-        rootThree.scene.add(mesh);
+        world.scene.add(mesh);
     })
 });
 
@@ -54,19 +54,15 @@ function trackKeys(keys :String[]) {
 	return down;
 }
 
-
-// export default function controllKeys() {
-//     //arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
-//     return trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
-// }
+// global array with the currently pressed control-key
 export let controllKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space"]);
 
 /*
-  window resize function 
+  window resize => change the camera settings
  */
 window.addEventListener('resize', onWindowResize, false)
 function onWindowResize() {
-    rootThree.rezise();
+    world.rezise();
 }
 
 /*
@@ -74,6 +70,6 @@ function onWindowResize() {
  */
 function animate() {
     requestAnimationFrame(animate)
-    rootThree.render();
+    world.render();
 }
 animate()

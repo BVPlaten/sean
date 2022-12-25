@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { rootThree } from './Root.js';
+import { world } from './ActionWorld.js';
 import { changeGeometry, singleGeometryRender } from './singleGeometry.js';
-import { PillConsuming } from './PillConsuming.js';
+import SceneCtrlr from './SceneCtrlr.js';
 // https://stackoverflow.com/questions/68462419/three-js-breaks-when-trying-to-import-orbitcontrols-js
 // https://medium.com/threejs/module-specifiers-versus-relative-import-references-fd747980ba6f
 /*
@@ -9,7 +9,7 @@ import { PillConsuming } from './PillConsuming.js';
  */
 const button = document.getElementById('loadscene');
 button === null || button === void 0 ? void 0 : button.addEventListener('click', (event) => {
-    const game = new PillConsuming("./scripts/worm_of_run.json");
+    const game = new SceneCtrlr("./scripts/worm_of_run.json");
 });
 /*
  button handler to switch between objects
@@ -18,13 +18,13 @@ const btns = Array.prototype.slice.call(document.getElementsByClassName("geomswi
 btns.forEach(button => {
     button.addEventListener("click", (e) => {
         //SwitchGeomtry(e.target.innerText)
-        rootThree.scene.clear();
-        singleGeometryRender(rootThree);
+        world.scene.clear();
+        singleGeometryRender(world);
         const geom = changeGeometry(e.target.innerText);
         const mtrl = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
         const mesh = new THREE.Mesh(geom, mtrl);
         mesh.name = 'RotationObject';
-        rootThree.scene.add(mesh);
+        world.scene.add(mesh);
     });
 });
 /*
@@ -43,24 +43,21 @@ function trackKeys(keys) {
     window.addEventListener("keyup", track);
     return down;
 }
-// export default function controllKeys() {
-//     //arrowKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
-//     return trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowUp", "Space"]);
-// }
+// global array with the currently pressed control-key
 export let controllKeys = trackKeys(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space"]);
 /*
-  window resize function
+  window resize => change the camera settings
  */
 window.addEventListener('resize', onWindowResize, false);
 function onWindowResize() {
-    rootThree.rezise();
+    world.rezise();
 }
 /*
  the animation is an endless loop of displaying frames on the screen
  */
 function animate() {
     requestAnimationFrame(animate);
-    rootThree.render();
+    world.render();
 }
 animate();
 //# sourceMappingURL=main.js.map

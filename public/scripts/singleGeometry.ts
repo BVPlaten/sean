@@ -1,8 +1,8 @@
 import * as THREE from 'three'
-import { rootThree, ThreeRootSingleton } from './Root.js'
+import { world, ActionWorld } from './ActionWorld.js'
 
 /* 
-   create the requested mesh
+   function to create a single geometry for demo purpose
  */
 function changeGeometry(componentName: string): THREE.BufferGeometry {
     let objToAdd: THREE.BufferGeometry;
@@ -24,14 +24,14 @@ function changeGeometry(componentName: string): THREE.BufferGeometry {
 }
 
 
-function singleGeometryRender(obj: ThreeRootSingleton){
+function singleGeometryRender(obj: ActionWorld){
     
-    let renderOneGeometry = (obj: ThreeRootSingleton) => {
+    let renderOneGeometry = (obj: ActionWorld) => {
         obj.rendr.render(obj.scene, obj.cam);
         obj.update('RotationObject')
         obj.controllerCheck('RotationObject');
     }
-    rootThree.renderFunc = renderOneGeometry;
+    world.renderFunc = renderOneGeometry;
 }
 
 export { changeGeometry, singleGeometryRender };
