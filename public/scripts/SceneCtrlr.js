@@ -1,5 +1,5 @@
-import * as THREE from 'three';
-import { world } from './ActionWorld.js';
+import { Scene, ObjectLoader } from 'three';
+import { controllKeys } from './main.js';
 /*
  * SceneCtrlr
  *
@@ -8,53 +8,95 @@ import { world } from './ActionWorld.js';
  *
  */
 export default class SceneCtrlr {
+    get scene() {
+        return this._scene;
+    }
+    set scene(value) {
+        this._scene = value;
+    }
     /*
      constructor
      Param: sceneFile : string : path with filename to load
      */
-    constructor(sceneFile) {
-        this.sceneFile = sceneFile;
-        this.loadScene();
-        this.addBoundings();
-        // a function called by the renderer 
-        this.localRenderFunc = (obj) => {
-            obj.rendr.render(obj.scene, obj.cam);
-            this.moveBox(obj);
-        };
-        // rendering is done in the world object
-        world.renderFunc = this.localRenderFunc;
+    constructor(fileName) {
+        this.fileName = fileName;
+        this._scene = new Scene();
+        this.loadScene(fileName);
     }
     /*
      load the JSON object with the scene definition
      */
-    loadScene() {
-        world.scene.clear();
+    loadScene(sceneFile) {
+        this._scene.clear();
         //this.localRenderFunc(rootThree); 
-        const Loader = new THREE.ObjectLoader();
+        const Loader = new ObjectLoader();
         Loader.load(
         // resource URL
-        this.sceneFile, 
+        sceneFile, 
         // onLoad callback
         // Here the loaded data is assumed to be an object
-        function (obj) {
-            world.scene.add(obj);
-            0;
+        (obj) => {
+            this._scene.add(obj);
         }, 
         // onProgress callback
-        function (xhr) {
+        (xhr) => {
             //console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
             return;
         }, 
         // onError callback
-        function (err) {
-            console.error('An error happened');
+        (err) => {
+            console.error(`An error happened ${err}`);
         });
     }
     /*
-     move the box selected by its name controlled by the cursor keys
+     write all object3d instances of the scene to the console
+    tellMeAll() {
+        super.traverse( ( obj: any ) => {
+            if ( obj instanceof Mesh ) console.log( obj );
+        });
+    }
+    */
+    /*
+     get 3dobject by name from the scene
      */
-    moveBox(obj) {
-        obj.controllerCheck('PlayerBoxObj', 0.33);
+    /*
+    getObjectByName(objName: string) {
+        return this.getObjectByName(objName)
+    }
+    */
+    /*
+     the animate function is called by the render function for every frame
+     */
+    update() {
+        const animObj = this._scene.getObjectByName('PlayerBoxObj');
+        if (animObj === undefined) {
+            return;
+        }
+        ;
+        animObj.rotation.y += 0.0724;
+        animObj.rotation.x += 0.0359;
+    }
+    /*
+     react to keyboard press event
+     TODO the animation logic should be put to the scene-controller
+     */
+    moveByKey(objName, step = .25) {
+        // console.log(controllKeys);
+        const animObj = this._scene.getObjectByName(objName);
+        if ((animObj !== undefined) && (animObj !== null)) {
+            if (controllKeys['ArrowUp'] === true) {
+                animObj.position.z += step;
+            }
+            if (controllKeys['ArrowDown'] === true) {
+                animObj.position.z -= step;
+            }
+            if (controllKeys['ArrowRight'] === true) {
+                animObj.position.x -= step;
+            }
+            if (controllKeys['ArrowLeft'] === true) {
+                animObj.position.x += step;
+            }
+        }
     }
     /*
      add the boundigs to the play-objects
@@ -69,8 +111,8 @@ export default class SceneCtrlr {
         objectNames.push('Pill4Obj');
         objectNames.push('Pill5Obj');
         objectNames.push('Pill6Obj');
-        const gameObj = world.scene.getObjectByName(objectNames[0]);
-        gameObj === null || gameObj === void 0 ? void 0 : gameObj.clear();
+        //const gameObj = world.scene.getObjectByName(objectNames[0]);
+        //gameObj?.clear();
     }
 }
 //# sourceMappingURL=SceneCtrlr.js.map

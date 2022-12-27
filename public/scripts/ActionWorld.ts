@@ -1,140 +1,56 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'OrbitControls';
 import { controllKeys } from './main.js';
+import SceneCtrlr from './SceneCtrlr.js'
 
 
 // the container contains the basic components of a 3D visualization
 // singleton : https://refactoring.guru/design-patterns/singleton/typescript/example
-export class ActionWorld {
-    private static instance: ActionWorld;
-    private _ctrls: OrbitControls;
-    private _rendr: THREE.WebGLRenderer;
-    private _cam: THREE.PerspectiveCamera;
-    private _scene: THREE.Scene;
-
-    public get renderFunc(): Function {
-        return this._renderFunc;
-    }
-    public set renderFunc(value: Function) {
-        this._renderFunc = value;
-    }
-    public get rendr(): THREE.WebGLRenderer {
-        return this._rendr;
-    }
-    public set rendr(value: THREE.WebGLRenderer) {
-        this._rendr = value;
-    }
-
-    public get cam(): THREE.PerspectiveCamera {
-        return this._cam;
-    }
-    public set cam(value: THREE.PerspectiveCamera) {
-        this._cam = value;
-    }
-
-    public get scene(): THREE.Scene {
-        return this._scene;
-    }
-    public set scene(value: THREE.Scene) {
-        this._scene = value;
-    }
-    public get ctrls(): OrbitControls {
-        return this._ctrls;
-    }
-    public set ctrls(value: OrbitControls) {
-        this._ctrls = value;
-    }
-
+//
+//  world is the container for the main Three.js components. 
+//  scene,camera,ligth,renderer and orbit-controls
+//  it is a singleton, one instance for all modules
+export default class ActionWorld {
+    public ctrls: OrbitControls;
+    public rendr: THREE.WebGLRenderer;
+    public cam: THREE.PerspectiveCamera;
+    public sceneCtrl: SceneCtrlr;
+    public sound: THREE.Audio;
 
     /*
     constructor
      */
-    private constructor(private _renderFunc: Function) {
-        this._scene = new THREE.Scene();
-        this._rendr = new THREE.WebGLRenderer();
-
+    constructor(public scene :SceneCtrlr) {
+        this.sceneCtrl = new SceneCtrlr('./scripts/worm_of_run.json');
+        this.rendr = new THREE.WebGLRenderer();
         this.rendr.setSize(window.innerWidth, window.innerHeight)
         document.body.appendChild(this.rendr.domElement)
-        let perspct: number = window.innerWidth / window.innerHeight,;
-        this._cam = new THREE.PerspectiveCamera( 75, perspct, 0.1, 1000 );
+
+        let perspct: number = window.innerWidth / window.innerHeight;
+        this.cam = new THREE.PerspectiveCamera( 75, perspct, 0.1, 1000 );
         this.cam.position.set(5,6,-12);
         this.ctrls = new OrbitControls( this.cam, this.rendr.domElement );
-        /*
-        this.ctrls.addEventListener("change", event => {  
-            console.log( this.ctrls.object.position ) 
-        });
-        */
-    }
 
+        this.rendr.render(this.sceneCtrl.scene,this.cam);
+        this.initSound();
+    }
 
     /*
-       singelton pattern
+     prepare a THREE.Audio Instance to play a sound in case of collision
      */
-    public static getInstance(renderF : Function): ActionWorld {
-        if (!ActionWorld.instance) {
-            ActionWorld.instance = new ActionWorld(renderF);
-        }
-        return ActionWorld.instance;
-    }
-
-
-    /* 
-        move the location of the camera to a random point 
-     */
-     public tellMeAll() {
-        this.scene.traverse( ( obj: any ) => {
-            if ( obj instanceof THREE.Mesh ) console.log( obj );
-        } );
-    }
-
-
-    /*
-       render() is called to create a new frame in the animation
-    */
-    public render() {
-        this._renderFunc(this);
-        //this.rendr.render(this.scene, this.cam);
-        //this.update('RotationObject')
-        //this.controllerCheck('RotationObject');
-    }
-
-
-    /*
-        update() changes the objects in the scene that should be animated somehow
-        https://www.becomebetterprogrammer.com/typescript-pass-function-as-a-parameter/
-     */
-    public update(objName : string) {
-        const animObj = world.scene.getObjectByName(objName);
-        if(animObj != null) {
-            animObj.rotation.x += Math.PI / 270;
-            animObj.rotation.y += Math.PI / 360;
-            animObj.rotation.z += Math.PI / 180;
-        }
-    }
-
-
-    /*
-     react to keyboard press event
-     TODO the animation logic should be put to the scene-controller
-     */
-    controllerCheck(objName : string, step: number = .05) {
-        // console.log(controllKeys);
-        const animObj = world.scene.getObjectByName(objName);
-
-        if ((animObj !== undefined) && (animObj !== null)) {
-             if(controllKeys['ArrowUp'] === true) {
-                 animObj!.position.z += step;
-             }
-             if(controllKeys['ArrowDown'] === true) {
-                 animObj!.position.z -= step;
-             }
-             if(controllKeys['ArrowRight'] === true) {
-                 animObj!.position.x -= step;
-             }
-             if(controllKeys['ArrowLeft'] === true) {
-                 animObj!.position.x += step;
-             }
-        }
+    public initSound() {
+        const listener = new THREE.AudioListener();
+        this.cam.add( listener );
+        this.sound = new THREE.Audio( listener );
+        
+        // load a sound and set it as the Audio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( './assets/MicrowaveBell.ogg', ( buffer: any ) => {
+            this.sound.setBuffer( buffer );
+            this.sound.setLoop( true );
+            this.sound.setVolume( 1 );
+            //this.sound.play();
+        });        
     }
 
     /*
@@ -144,22 +60,21 @@ export class ActionWorld {
         this.cam.aspect = window.innerWidth / window.innerHeight
         this.cam.updateProjectionMatrix()
         this.rendr.setSize(window.innerWidth, window.innerHeight)
-        this.render();
+        this.rendr.render(this.sceneCtrl.scene,this.cam);
     }
+
+    /*
+     animation function of the scene 
+     */
+    public update() {
+        this.sceneCtrl.update();
+        this.sceneCtrl.moveByKey('PlayerBoxObj')
+        this.rendr.render(this.sceneCtrl.scene,this.cam);
+    }
+
+
 }
 
 
-let renderStandart = (obj: ActionWorld) => {
-    obj.rendr.render(obj.scene, obj.cam);
-    obj.update('RotationObject')
-    obj.controllerCheck('RotationObject');
-}
-
-/*
- world is the container for the main Three.js components. 
- scene,camera,ligth,renderer and orbit-controls
- it is a singleton, reused in all modules
- */
-export const world: ActionWorld = ActionWorld.getInstance(renderStandart);
 
 

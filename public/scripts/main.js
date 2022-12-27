@@ -1,32 +1,5 @@
-import * as THREE from 'three';
-import { world } from './ActionWorld.js';
-import { changeGeometry, singleGeometryRender } from './singleGeometry.js';
+import ActionWorld from './ActionWorld.js';
 import SceneCtrlr from './SceneCtrlr.js';
-// https://stackoverflow.com/questions/68462419/three-js-breaks-when-trying-to-import-orbitcontrols-js
-// https://medium.com/threejs/module-specifiers-versus-relative-import-references-fd747980ba6f
-/*
- button handler to start the load object function
- */
-const button = document.getElementById('loadscene');
-button === null || button === void 0 ? void 0 : button.addEventListener('click', (event) => {
-    const game = new SceneCtrlr("./scripts/worm_of_run.json");
-});
-/*
- button handler to switch between objects
- */
-const btns = Array.prototype.slice.call(document.getElementsByClassName("geomswitch"));
-btns.forEach(button => {
-    button.addEventListener("click", (e) => {
-        //SwitchGeomtry(e.target.innerText)
-        world.scene.clear();
-        singleGeometryRender(world);
-        const geom = changeGeometry(e.target.innerText);
-        const mtrl = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-        const mesh = new THREE.Mesh(geom, mtrl);
-        mesh.name = 'RotationObject';
-        world.scene.add(mesh);
-    });
-});
 /*
   button handler to controll the movement
  */
@@ -57,7 +30,11 @@ function onWindowResize() {
  */
 function animate() {
     requestAnimationFrame(animate);
-    world.render();
+    world.update();
 }
+// https://stackoverflow.com/questions/68462419/three-js-breaks-when-trying-to-import-orbitcontrols-js
+// https://medium.com/threejs/module-specifiers-versus-relative-import-references-fd747980ba6f
+let sceneCtrl = new SceneCtrlr('./scripts/worm_of_run.json');
+let world = new ActionWorld(sceneCtrl);
 animate();
 //# sourceMappingURL=main.js.map
