@@ -1,4 +1,4 @@
-import {Scene,Mesh,ObjectLoader,AudioListener} from 'three';
+import {Scene,Mesh,MeshBasicMaterial,Object3D,Box3,Sphere,Vector3} from 'three';
 import {controllKeys} from './main.js'
 
 
@@ -12,6 +12,8 @@ import {controllKeys} from './main.js'
 
 export default class SceneCtrlr {
     private _scene: Scene;
+    public arrOfObstcls: Array<Sphere>;
+
     public get scene(): Scene {
         return this._scene;
     }
@@ -24,63 +26,14 @@ export default class SceneCtrlr {
      constructor 
      Param: sceneFile : string : path with filename to load 
      */
-    constructor(private fileName: string) {
+    constructor(private gameObject: any) {
         this._scene = new Scene();
-
-        this.loadScene(fileName);
+        this._scene.add(gameObject);
+        this.arrOfObstcls = new Array<Sphere>;
+        const specialPill = this._scene.getObjectByName('Pill3Obj');
+        const specMaterial = new MeshBasicMaterial({color:0x0000ff})
+        specialPill.material = specMaterial;
     }
-
-
-    /*
-     load the JSON object with the scene definition
-     */
-    loadScene(sceneFile: string): void {
-        this._scene.clear();
-        //this.localRenderFunc(rootThree); 
-        const Loader = new ObjectLoader();
-
-        Loader.load(
-            // resource URL
-            sceneFile,
-        
-            // onLoad callback
-            // Here the loaded data is assumed to be an object
-            ( obj: any ) => {
-                this._scene.add( obj );
-            },
-        
-            // onProgress callback
-            ( xhr: any ) => {
-                //console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-                return;
-            },
-        
-            // onError callback
-            ( err: any ) => {
-                console.error( `An error happened ${err}` );
-            }
-        );
-    }
-
-
-    /* 
-     write all object3d instances of the scene to the console
-    tellMeAll() {
-        super.traverse( ( obj: any ) => {
-            if ( obj instanceof Mesh ) console.log( obj );
-        });
-    }
-    */
-
-    /*
-     get 3dobject by name from the scene
-     */
-    /*
-    getObjectByName(objName: string) {
-        return this.getObjectByName(objName)
-    }
-    */
-
 
     /*
      the animate function is called by the render function for every frame
@@ -117,23 +70,58 @@ export default class SceneCtrlr {
         }
     }
 
-    
+
     /*
      add the boundigs to the play-objects
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ToDo
+Mach ersteinmal eine einfache funktion in der dur die einzelnennen Object§D Instanzen aus der Szene ausliest ubd diese dann 
+mit einem bounding versiehst 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ToDo
+*/
+
+    /*
+     add boundings to game-objects
      */
     addBoundings() {
         // create a list with all objects that needs a collision detection
-        const objectNames = new Array<string>();
-        objectNames.push('PlayerBoxObj');
-        objectNames.push('Pill1Obj');
-        objectNames.push('Pill2Obj');
-        objectNames.push('Pill3Obj');
-        objectNames.push('Pill4Obj');
-        objectNames.push('Pill5Obj');
-        objectNames.push('Pill6Obj');
-
-        //const gameObj = world.scene.getObjectByName(objectNames[0]);
-        //gameObj?.clear();
+        let objNames = ['PlayerBoxObj', 'Pill1Obj', 'Pill2Obj', 'Pill3Obj', 'Pill4Obj', 'Pill5Obj', 'Pill6Obj'];
+        const setBounding =  (child: Object3D ) => {
+            if( child instanceof Mesh ) {
+                if(child.name.startsWith('Player')) {
+                    this.addBoundingBox(child);
+                }
+                if(child.name.startsWith('Pill')) {
+                    this.addBoundingSphere(child);
+                }
+            }
+        };
+        this._scene.traverse( (child: Object3D) => {setBounding( child ) });
     }
+
+    /*
+     add bounding box to the player-object
+     */
+    addBoundingBox(child: Object3D) {
+        console.log(`Player Mesh detected ${child.name} : Box`)
+        // return;
+        const knotBBox = new Box3(new Vector3(), new Vector3());
+        knotBBox.setFromObject(child);
+    }
+
+    /*
+     add bounding sphere to the obstacles
+    */
+    addBoundingSphere(child: Object3D) {
+        console.log(`Obstacle Mesh detected ${child.name} : Sphere`)
+        // return;
+        const knotBSphere = new Sphere(
+            child.position,
+            child.geometry.boundingSphere.radius
+            );
+        this.arrOfObstcls.push(knotBSphere)
+    }
+
 
 }

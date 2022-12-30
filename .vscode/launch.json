@@ -21,6 +21,14 @@
                 {
                     "url": "http://localhost:3000/scripts",
                     "path": "${workspaceFolder}/public/scripts"
+                },
+                {
+                    "url": "http://localhost:3000/scripts",
+                    "path": "${workspaceFolder}/public/scripts"
+                },
+                {
+                    "url": "http://localhost:3000/scripts",
+                    "path": "${workspaceFolder}/public/scripts"
                 }
             ]
         }

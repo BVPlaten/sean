@@ -1,4 +1,4 @@
-import { Scene, ObjectLoader } from 'three';
+import { Scene, Mesh, MeshBasicMaterial, Box3, Sphere, Vector3 } from 'three';
 import { controllKeys } from './main.js';
 /*
  * SceneCtrlr
@@ -18,52 +18,15 @@ export default class SceneCtrlr {
      constructor
      Param: sceneFile : string : path with filename to load
      */
-    constructor(fileName) {
-        this.fileName = fileName;
+    constructor(gameObject) {
+        this.gameObject = gameObject;
         this._scene = new Scene();
-        this.loadScene(fileName);
+        this._scene.add(gameObject);
+        this.arrOfObstcls = new Array;
+        const specialPill = this._scene.getObjectByName('Pill3Obj');
+        const specMaterial = new MeshBasicMaterial({ color: 0x0000ff });
+        specialPill.material = specMaterial;
     }
-    /*
-     load the JSON object with the scene definition
-     */
-    loadScene(sceneFile) {
-        this._scene.clear();
-        //this.localRenderFunc(rootThree); 
-        const Loader = new ObjectLoader();
-        Loader.load(
-        // resource URL
-        sceneFile, 
-        // onLoad callback
-        // Here the loaded data is assumed to be an object
-        (obj) => {
-            this._scene.add(obj);
-        }, 
-        // onProgress callback
-        (xhr) => {
-            //console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            return;
-        }, 
-        // onError callback
-        (err) => {
-            console.error(`An error happened ${err}`);
-        });
-    }
-    /*
-     write all object3d instances of the scene to the console
-    tellMeAll() {
-        super.traverse( ( obj: any ) => {
-            if ( obj instanceof Mesh ) console.log( obj );
-        });
-    }
-    */
-    /*
-     get 3dobject by name from the scene
-     */
-    /*
-    getObjectByName(objName: string) {
-        return this.getObjectByName(objName)
-    }
-    */
     /*
      the animate function is called by the render function for every frame
      */
@@ -100,19 +63,48 @@ export default class SceneCtrlr {
     }
     /*
      add the boundigs to the play-objects
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ToDo
+Mach ersteinmal eine einfache funktion in der dur die einzelnennen Object§D Instanzen aus der Szene ausliest ubd diese dann
+mit einem bounding versiehst
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ToDo
+*/
+    /*
+     add boundings to game-objects
      */
     addBoundings() {
         // create a list with all objects that needs a collision detection
-        const objectNames = new Array();
-        objectNames.push('PlayerBoxObj');
-        objectNames.push('Pill1Obj');
-        objectNames.push('Pill2Obj');
-        objectNames.push('Pill3Obj');
-        objectNames.push('Pill4Obj');
-        objectNames.push('Pill5Obj');
-        objectNames.push('Pill6Obj');
-        //const gameObj = world.scene.getObjectByName(objectNames[0]);
-        //gameObj?.clear();
+        let objNames = ['PlayerBoxObj', 'Pill1Obj', 'Pill2Obj', 'Pill3Obj', 'Pill4Obj', 'Pill5Obj', 'Pill6Obj'];
+        const setBounding = (child) => {
+            if (child instanceof Mesh) {
+                if (child.name.startsWith('Player')) {
+                    this.addBoundingBox(child);
+                }
+                if (child.name.startsWith('Pill')) {
+                    this.addBoundingSphere(child);
+                }
+            }
+        };
+        this._scene.traverse((child) => { setBounding(child); });
+    }
+    /*
+     add bounding box to the player-object
+     */
+    addBoundingBox(child) {
+        console.log(`Player Mesh detected ${child.name} : Box`);
+        // return;
+        const knotBBox = new Box3(new Vector3(), new Vector3());
+        knotBBox.setFromObject(child);
+    }
+    /*
+     add bounding sphere to the obstacles
+    */
+    addBoundingSphere(child) {
+        console.log(`Obstacle Mesh detected ${child.name} : Sphere`);
+        // return;
+        const knotBSphere = new Sphere(child.position, child.geometry.boundingSphere.radius);
+        this.arrOfObstcls.push(knotBSphere);
     }
 }
 //# sourceMappingURL=SceneCtrlr.js.map

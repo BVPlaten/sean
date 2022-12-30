@@ -14,14 +14,12 @@ export default class ActionWorld {
     public ctrls: OrbitControls;
     public rendr: THREE.WebGLRenderer;
     public cam: THREE.PerspectiveCamera;
-    public sceneCtrl: SceneCtrlr;
     public sound: THREE.Audio;
 
     /*
     constructor
      */
     constructor(public scene :SceneCtrlr) {
-        this.sceneCtrl = new SceneCtrlr('./scripts/worm_of_run.json');
         this.rendr = new THREE.WebGLRenderer();
         this.rendr.setSize(window.innerWidth, window.innerHeight)
         document.body.appendChild(this.rendr.domElement)
@@ -31,7 +29,7 @@ export default class ActionWorld {
         this.cam.position.set(5,6,-12);
         this.ctrls = new OrbitControls( this.cam, this.rendr.domElement );
 
-        this.rendr.render(this.sceneCtrl.scene,this.cam);
+        this.rendr.render(this.scene.scene,this.cam);
         this.initSound();
     }
 
@@ -60,16 +58,17 @@ export default class ActionWorld {
         this.cam.aspect = window.innerWidth / window.innerHeight
         this.cam.updateProjectionMatrix()
         this.rendr.setSize(window.innerWidth, window.innerHeight)
-        this.rendr.render(this.sceneCtrl.scene,this.cam);
+        this.rendr.render(this.scene.scene,this.cam);
     }
 
     /*
      animation function of the scene 
      */
     public update() {
-        this.sceneCtrl.update();
-        this.sceneCtrl.moveByKey('PlayerBoxObj')
-        this.rendr.render(this.sceneCtrl.scene,this.cam);
+        this.scene.update();
+        this.scene.moveByKey('PlayerBoxObj')
+        
+        this.rendr.render(this.scene.scene,this.cam);
     }
 
 
