@@ -12,7 +12,8 @@ import {controllKeys} from './main.js'
 
 export default class SceneCtrlr {
     private _scene: Scene;
-    public arrOfObstcls: Array<Sphere>;
+    public arrOfObstcls: Array<object>;
+    knotBSphere: any;
 
     public get scene(): Scene {
         return this._scene;
@@ -29,10 +30,38 @@ export default class SceneCtrlr {
     constructor(private gameObject: any) {
         this._scene = new Scene();
         this._scene.add(gameObject);
-        this.arrOfObstcls = new Array<Sphere>;
+        this.arrOfObstcls = new Array<object>;
+
+        // https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection/Bounding_volume_collision_detection_with_THREE.js
+        // expand THREE.js Sphere to support collision tests vs Box3
+        // we are creating a vector outside the method scope to
+        // avoid spawning a new instance of Vector3 on every check
+        Sphere.__closest = new Vector3();
+        Sphere.prototype.intersectsBox = function (box: Mesh) {
+        // get box closest point to sphere center by clamping
+        Sphere.__closest.set(this.center.x, this.center.y, this.center.z);
+        Sphere.__closest.clamp(box.min, box.max);
+        const distance = this.center.distanceToSquared(Sphere.__closest);
+        return distance < this.radius * this.radius;
+        };
+    }
+
+    private collision() {
+        const playerBox = this._scene.getObjectByName('PlayerBoxObj');
+        playerBox.geometry.computeBoundingBox();
+        const knotBBox = new Box3(
+            playerBox.geometry.boundingBox.min,
+            playerBox.geometry.boundingBox.max
+          );
+
         const specialPill = this._scene.getObjectByName('Pill3Obj');
-        const specMaterial = new MeshBasicMaterial({color:0x0000ff})
-        specialPill.material = specMaterial;
+        specialPill.geometry.computeBoundingSphere();
+        const knotBSphere = new Sphere(specialPill.position, 
+                                       specialPill.geometry.boundingSphere.radius );
+        if(knotBSphere.intersectsBox(knotBBox)) {
+            console.log('Kontakt !!!');
+        }
+                            
     }
 
     /*
@@ -43,6 +72,7 @@ export default class SceneCtrlr {
         if(animObj === undefined) {return};
         animObj.rotation.y += 0.0724;
         animObj.rotation.x += 0.0359;
+        this.collision();
     }
 
 
